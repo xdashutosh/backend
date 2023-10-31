@@ -1,8 +1,31 @@
 import express from 'express';
-import { getAllUsers } from '../controllers/usercontroller.js';
+import { register } from '../controllers/usercontroller.js';
 const router = express.Router();
 
-router.route("/users").get(getAllUsers);
+//register
+router.route("/register").post(register);
 
+//login
+
+
+//logout
+
+//get my profile
+
+
+
+//change password
+
+
+//update profile
+
+//update profile picture
+
+//forget password 
+//Reset password
+
+
+//addtoplaylist
+//removefromplaylist
 
 export default router;
