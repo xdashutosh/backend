@@ -16,3 +16,8 @@ req.user = await User.findById(decoded._id);
 
 next();
 });
+
+export const authadmin = (req,res,next) => {
+if(req.user.role!=="admin") return next(new ErrorHandler("not an Admin! not allowed",403));
+next();
+};

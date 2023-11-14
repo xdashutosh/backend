@@ -1,10 +1,11 @@
 import express from 'express';
-import { changePassword,  forgotPassword,  getMyProfile, login, logout, register, resetPassword, updateProfile, updateProfilePicture } from '../controllers/usercontroller.js';
-import { isAuthenticated } from '../middlewares/auth.js';
+import {  addToPlaylist, changePassword,   deleteMyProfile,   deleteUser,   forgotPassword,  getAllUsers,  getMyProfile, login, logout, register, removeFromPlaylist, resetPassword,updateProfile, updateProfilePicture, updateRole } from '../controllers/usercontroller.js';
+import { authadmin, isAuthenticated } from '../middlewares/auth.js';
+import singleUpload from '../middlewares/multer.js';
 const router = express.Router();
 
 //register
-router.route("/register").post(register);
+router.route("/register").post(singleUpload,register);
 
 //login
 router.route("/login").post(login);
@@ -15,7 +16,7 @@ router.route("/login").post(login);
 router.route("/logout").get(logout);
 
 //get my profile
-router.route("/me").get(isAuthenticated,getMyProfile);
+router.route("/me").get(isAuthenticated,getMyProfile).delete(isAuthenticated,deleteMyProfile);
 
 
 
@@ -27,7 +28,7 @@ router.route("/changepassword").put(isAuthenticated,changePassword);
 router.route("/updateprofile").put(isAuthenticated,updateProfile);
 
 //update profile picture
-router.route("/updateprofilepicture").put(isAuthenticated,updateProfilePicture);
+router.route("/updateprofilepicture").put(singleUpload,isAuthenticated,updateProfilePicture);
 
 
 
@@ -40,6 +41,16 @@ router.route("/resetpassword/:token").put(resetPassword);
 
 
 //addtoplaylist
+router.route("/addtoplaylist").post(isAuthenticated,addToPlaylist);
+
+
+
 //removefromplaylist
+router.route("/removefromplaylist").delete(isAuthenticated,removeFromPlaylist);
+
+
+router.route("/admin/users").get(isAuthenticated,authadmin,getAllUsers);
+router.route("/admin/users/:id").put(isAuthenticated,authadmin,updateRole).delete(isAuthenticated,authadmin,deleteUser);
+
 
 export default router;
