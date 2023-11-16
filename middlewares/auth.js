@@ -21,3 +21,9 @@ export const authadmin = (req,res,next) => {
 if(req.user.role!=="admin") return next(new ErrorHandler("not an Admin! not allowed",403));
 next();
 };
+
+export const isSubscribed = (req,res,next) => {
+    if(req.user.subscription.status!=="active" && req.user.role!=="admin") return next(new ErrorHandler("not a subscriber! not allowed",403));
+    next();
+    };
+
