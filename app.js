@@ -1,6 +1,7 @@
 import  express  from "express";
 import {config} from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 config({
     path:"./config/config.env",
@@ -14,6 +15,14 @@ app.use(express.urlencoded({
 }))
 app.use(cookieParser());
 
+
+app.use(cors({
+    origin: process.env.FRONTEND_URL,
+    credentials:true,
+    methods:['GET', 'POST', 'PUT', 'DELETE'],
+
+}))
+
 import course from './routes/courseRoutes.js'
 import user from './routes/userRoutes.js'
 import {Errormiddleware} from './middlewares/Error.js'
@@ -25,6 +34,6 @@ app.use("/api/v1",payment);
 app.use("/api/v1",otherRoutes);
 app.use(Errormiddleware);
 
-app.get('/',(req,res)=>{res.send("<h1>backend is working fine</h1>")})
+app.get('/',(req,res)=>{res.send(`<h1>Visit site ${process.env.FRONTEND_URL}</h1>`)});
 
 export default app
