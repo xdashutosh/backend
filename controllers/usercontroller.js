@@ -6,7 +6,7 @@ import { sendtoken } from "../utils/sendtoken.js";
 import { Course } from "../models/Course.js";
 import getDatauri from "../utils/dataUri.js";
 import cloudinary from "cloudinary";
-
+import { Stats } from "../models/Stats.js";
 
 
 
@@ -302,3 +302,39 @@ await cloudinary.v2.uploader.destroy(user.avatar.public_id);
           message:`Account deleted successfully`
           });
         };
+
+
+
+      User.watch().on("change",async()=>{
+        const stats = await Stats.find({}).sort({createdAt:"desc"}).limit(1);
+        const subscription = await User.find({"subscription.status":"active"});
+        stats[0].users = await User.countDocuments();
+        stats[0].subscriptions = subscription.length;
+        stats[0].createdAt = new Date(Date.now());
+         console.log(stats);
+        await stats[0].save();
+      });
+
+
+      Course.watch().on("change",async()=>{
+        try {
+          const stats = await Stats.find({}).sort({createdAt:"desc"}).limit(1);
+          const courses = await Course.find({});
+          console.log("course chnaged!");
+  
+         let totalviews =0;
+         for(let i = 0; i < courses.length; i)
+         {
+          totalviews+=courses[i].views;
+         }
+         stats[0].views = totalviews;
+         stats[0].createdAt = new Date(Date.now());
+  
+         await stats[0].save();  
+  
+          
+        } catch (error) {
+          console.log(err);
+        }
+       
+      });
