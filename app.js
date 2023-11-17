@@ -25,4 +25,6 @@ app.use("/api/v1",payment);
 app.use("/api/v1",otherRoutes);
 app.use(Errormiddleware);
 
+app.get('/',(req,res)=>{res.send("<h1>backend is working fine</h1>")})
+
 export default app
