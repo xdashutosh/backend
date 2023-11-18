@@ -12,6 +12,7 @@ const options = {
 res.status(statusCode).cookie("token",token,options).json({
     success:true,
     message,
-    user
+    user,
+    token
 })
 };
